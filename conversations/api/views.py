@@ -4,6 +4,15 @@ from rest_framework import status
 
 from .dispatcher import dispatch_event
 
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from conversations.models import Conversation
+from conversations.api.serializers import ConversationSerializer
+
+class ConversationViewSet(ReadOnlyModelViewSet):
+  queryset = Conversation.objects.all()
+  serializer_class = ConversationSerializer
+  lookup_field = "id"
+
 @api_view(['POST'])
 def webhook_view(request):
   try:
