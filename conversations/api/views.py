@@ -1,17 +1,21 @@
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .dispatcher import dispatch_event
 
-from rest_framework.viewsets import ReadOnlyModelViewSet
 from conversations.models import Conversation
 from conversations.api.serializers import ConversationSerializer
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 class ConversationViewSet(ReadOnlyModelViewSet):
-  queryset = Conversation.objects.all()
+  queryset         = Conversation.objects.all().order_by("-id")
   serializer_class = ConversationSerializer
-  lookup_field = "id"
+  lookup_field     = "id"
+  filter_backends  = [DjangoFilterBackend]
+  filterset_fields = ["state"]
 
 @api_view(['POST'])
 def webhook_view(request):
