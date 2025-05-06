@@ -10,24 +10,21 @@ def webhook_view(request):
 
     event_type = request.data.get("type")
     if not event_type:
-      return Response({ "message": "Missing event_type" }, status=status.HTTP_400_BAD_REQUEST)
+      raise Exception("Missing event_type")
 
     data = request.data.get("data")
     if not data:
-      return Response({ "message": "Missing data" }, status=status.HTTP_400_BAD_REQUEST)
+      raise Exception("Missing data")
 
     timestamp = request.data.get("timestamp")
     if timestamp:
       data["timestamp"] = timestamp
 
     response_data = dispatch_event(event_type, data)
-
-    status_code = response_data["status"]
-
-    response_data.pop('status', None)
     response_data.pop('conversation', None)
+    response_data.pop('message_object', None)
 
-    return Response(response_data, status=status_code)
+    return Response(response_data, status=status.HTTP_200_OK)
 
   except ValueError as ve:
     return Response({ "message": str(ve) }, status=status.HTTP_400_BAD_REQUEST)
