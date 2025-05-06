@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'conversations',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
