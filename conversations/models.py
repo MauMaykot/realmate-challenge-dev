@@ -17,6 +17,9 @@ class Conversation(models.Model):
   def is_closed(self):
     return self.state == self.__class__.State.CLOSED
 
+  def messages_count(self):
+    return self.messages.all().count()
+
 class Message(models.Model):
 
   class Direction(models.TextChoices):
@@ -29,3 +32,6 @@ class Message(models.Model):
   content      = models.TextField()
 
   timestamp    = models.DateTimeField()
+
+  def sanitized_direction(self):
+    return self.direction.lower()

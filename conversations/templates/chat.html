@@ -1,0 +1,123 @@
+{% extends 'dash.html' %}
+
+{% block title %}Messages{% endblock %}
+
+{% block content %}
+
+<style>
+  body {
+    background-color: #f0f2f5;
+  }
+
+  .chat-box {
+    width: 370px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+
+  .chat-header {
+    background-color: #3852FF;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chat-header h6 {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
+  .chat-body {
+    background-color: #fff;
+    padding: 1rem;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  .chat-message {
+    margin-bottom: 1rem;
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: bold;
+  }
+
+  .received-message {
+    background-color: #3852FF;
+    color: white;
+    align-self: end;
+    border-bottom-right-radius: 0;
+  }
+
+  .sent-message {
+    background-color: #2DB6CE;
+    color: white;
+    align-self: start;
+    border-bottom-left-radius: 0;
+  }
+
+  .chat-footer {
+    border-top: 1px solid #ddd;
+    background-color: #fff;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .chat-footer input {
+    border: none;
+    flex: 1;
+    outline: none;
+  }
+
+  .chat-footer input::placeholder {
+    color: #aaa;
+  }
+
+  .chat-footer .send-btn {
+    background: none;
+    border: none;
+    color: #0052f1;
+    font-size: 1.25rem;
+  }
+
+  .icon {
+    width: 18px;
+    height: 18px;
+    color: white;
+  }
+</style>
+
+
+
+<div class="d-flex justify-content-center align-items-center">
+  <div class="chat-box d-flex flex-column mt-3">
+
+    <div class="chat-header d-flex justify-content-between align-items-center">
+      <a href={% url 'dash' %} class="btn" style="font-weight: bold; color: white; margin-left: -10px;">
+        <i class="fa fa-chevron-left"></i>
+      </a>
+
+      <h6 class="m-0">{{ conversation.id }}</h6>
+    </div>
+
+    <div class="chat-body d-flex flex-column">
+      {% for message in conversation.messages.all %}
+
+      <div class="chat-message {{ message.sanitized_direction }}-message {% if message.direction == 'SENT' %}align-self-start{% else %}align-self-end{% endif %}">
+        {{ message.content }}
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

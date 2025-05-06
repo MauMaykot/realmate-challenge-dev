@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 def user_login(request):
   context = {}
@@ -15,3 +15,7 @@ def user_login(request):
       return redirect('dash')
 
   return render(request, 'login.html', context)
+
+def user_logout(request):
+  logout(request)
+  return redirect('login')
