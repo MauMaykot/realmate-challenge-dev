@@ -14,6 +14,9 @@ class Conversation(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
+  def is_closed(self):
+    return self.state == self.__class__.State.CLOSED
+
 class Message(models.Model):
 
   class Direction(models.TextChoices):

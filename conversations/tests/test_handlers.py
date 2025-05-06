@@ -54,3 +54,20 @@ class EventHandlerTests(TestCase):
 
     with self.assertRaisesMessage(Exception, "This conversation is closed"):
       dispatch_event("NEW_MESSAGE", event_data)
+
+  def test_close_conversation_event(self):
+    conversation_id = uuid.uuid4()
+    conversation    = Conversation.objects.create(id=conversation_id, state=Conversation.State.OPEN)
+
+    self.assertEqual(Conversation.State.OPEN, conversation.state)
+
+    response_data = dispatch_event("CLOSE_CONVERSATION", { "id": str(conversation_id) })
+
+    conversation  = response_data["conversation"]
+
+    self.assertEqual(Conversation.State.CLOSED, conversation.state)
+
+    message = response_data['message']
+    self.assertEqual('Conversation closed with success!', message )
+
+    self.assertTrue(conversation.is_closed)

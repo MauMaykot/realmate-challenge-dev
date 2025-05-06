@@ -102,3 +102,38 @@ class WebhookViewTest(APITestCase):
       data = response.data
       message = data["message"]
       self.assertEqual(f"Cannot create message with same id: '{message_id}'", message)
+
+    def test_close_conversation_via_post(self):
+      conversation = Conversation.objects.create(id=uuid.uuid4(), state=Conversation.State.OPEN)
+
+      payload = {
+        "type": "CLOSE_CONVERSATION",
+        "data": { "id": str(conversation.id) }
+      }
+
+      response = self.client.post(self.url, data=payload, format='json')
+      self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+      conversation.refresh_from_db()
+      self.assertEqual(conversation.state, Conversation.State.CLOSED)
+
+      message_id = uuid.uuid4()
+      post_close_message_payload = {
+        "type": "NEW_MESSAGE",
+        "timestamp": "2025-05-06T12:03:00Z",
+        "data": {
+          "id": str(message_id),
+          "direction": "SENT",
+          "content": "Ainda posso falar?",
+          "conversation_id": str(conversation.id)
+        }
+      }
+
+      response = self.client.post(self.url, data=post_close_message_payload, format='json')
+      self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+      self.assertFalse(Message.objects.filter(id=message_id).exists())
+
+      response_data = response.data
+      message = response_data['message']
+      self.assertEqual('This conversation is closed', message)
