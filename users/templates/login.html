@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Login</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+  </head>
+  <body class="d-flex align-items-center py-4 bg-body-tertiary">
+
+    <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    </svg>
+
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+    </div>
+
+    <main class="form-signin w-100 m-auto">
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="row text-center">
+          <img class="mb-4" src="{% static 'imgs/realmate_logo.svg' %}" alt="" height="30">
+        </div>
+
+        <div class="form-floating">
+          <input type="text" name="username" class="form-control" id="floatingInput" placeholder="Usuário" required>
+          <label for="floatingInput">Usuário</label>
+        </div>
+
+        <div class="form-floating mt-3">
+          <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Senha" required>
+          <label for="floatingPassword">Senha</label>
+        </div>
+
+        <button class="btn btn-primary mt-2 py-2 float-end w-100" type="submit" style="background: linear-gradient(to right, #3b82f6, #06b6d4); font-weight: bold; border: none;">ENTRAR</button>
+      </form>
+    </main>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  </body>
+</html>
